@@ -1,0 +1,116 @@
+﻿<Window x:Class="SfDataGridDemo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SfDataGridDemo"
+        xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+        mc:Ignorable="d"
+        Title="SfDataGridDemo" Height="450" Width="400">
+    <Window.Resources>
+        <Style TargetType="syncfusion:GridCell" x:Key="CellStyle">
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+        <Style TargetType="syncfusion:GridCell" x:Key="DetailCellStyle">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="Foreground" Value="Red"/>
+        </Style>
+        <Style  TargetType="syncfusion:DetailsViewContentPresenter">
+            <Setter Property="BorderBrush" Value="Gray" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="IsTabStop" Value="False" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="syncfusion:DetailsViewContentPresenter">
+                        <Border x:Name="PART_RowBorder"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Padding="{TemplateBinding Padding}">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="BorderStates">
+                                    <VisualState x:Name="NormalCell">
+                                        <Storyboard BeginTime="0">
+                                            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="PART_RowBorder" Storyboard.TargetProperty="(Border.BorderThickness)">
+                                                <EasingThicknessKeyFrame KeyTime="0" Value="0,0,1,0" />
+                                            </ThicknessAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="LastCell">
+                                        <Storyboard BeginTime="0">
+                                            <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="PART_RowBorder" Storyboard.TargetProperty="(Border.BorderThickness)">
+                                                <EasingThicknessKeyFrame KeyTime="0" Value="0,0,1,1" />
+                                            </ThicknessAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <ContentPresenter />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <local:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+        <local:IntToVisibilityConverter x:Key="IntToVisibilityConverter"/>
+    </Window.Resources>
+
+    <Grid>
+        <syncfusion:SfDataGrid Grid.Row="1" x:Name="dataGrid"
+                               AutoGenerateColumns="False" AutoGenerateRelations="False"  ColumnSizer="Star"                             
+                               CurrentCellBorderThickness="0" Foreground="Blue" RowHeight="40"
+                               ItemsSource="{Binding OrderTransactions}" BorderThickness="0"
+                               ShowRowHeader="False" HeaderRowHeight="0" 
+                               HideEmptyGridViewDefinition="True" ShowDetailsViewIndentCell="False" 
+                               CellStyle="{StaticResource CellStyle}"                               
+                               ExpanderColumnWidth="0">
+            <syncfusion:SfDataGrid.Columns>
+                <syncfusion:GridTextColumn Width="35" TextAlignment="Center" MappingName="OrderTransaction.Qty"/>
+                <syncfusion:GridTextColumn TextAlignment="Left" MappingName="OrderTransaction.Name"/>
+                <syncfusion:GridNumericColumn Width="55" TextAlignment="Right" MappingName="OrderTransaction.GrandPrice"/>
+            </syncfusion:SfDataGrid.Columns>
+            <syncfusion:SfDataGrid.DetailsViewDefinition>
+                <syncfusion:TemplateViewDefinition>
+                    <syncfusion:TemplateViewDefinition.RowTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <ItemsControl x:Name="ICTransactionModifiers" 
+                                              Visibility="{Binding Data.OrderTransaction.TransactionModifiers.Count,
+                                    Converter={StaticResource IntToVisibilityConverter}}"
+                                              ItemsSource="{Binding Data.OrderTransaction.TransactionModifiers}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel x:Name="container" Background="Transparent">
+                                                <Grid Height="Auto" MinHeight="30">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="50"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="50"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock VerticalAlignment="Center"
+                                                           Grid.Column="1"
+                                                           HorizontalAlignment="Right"
+                                                           Margin="5 0"
+                                                           TextAlignment="Right"
+                                                           TextWrapping="Wrap"
+                                                           Foreground="Red"
+                                                           Text="{Binding DisplayName}"/>
+                                                </Grid>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                                <TextBlock Text="{Binding Data.OrderTransaction.DisplayDiscount}"
+                                                   HorizontalAlignment="Center"
+                                           Visibility="{Binding Data.OrderTransaction.DisplayDiscount,
+                                    Converter={StaticResource StringToVisibilityConverter}}"
+                                                   Foreground="Red"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </syncfusion:TemplateViewDefinition.RowTemplate>
+                </syncfusion:TemplateViewDefinition>
+            </syncfusion:SfDataGrid.DetailsViewDefinition>
+        </syncfusion:SfDataGrid>
+    </Grid>
+</Window>
