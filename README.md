@@ -95,5 +95,7 @@ private void DataGrid_Loaded(object sender, RoutedEventArgs e)
 
 Take a moment to peruse the [WPF DataGrid - Record Template View](https://help.syncfusion.com/wpf/datagrid/record-template-view) documentation, where you can find about conditional record template view with code examples.
 
+KB article - [How to hide the empty row and remove the border of TemplateViewDefinition in WPF DataGrid (SfDataGrid)?](https://www.syncfusion.com/kb/12627/how-to-hide-the-empty-row-and-remove-the-border-of-templateviewdefinition-in-wpf-datagrid)
+
 ## Requirements to run the demo
 Visual Studio 2015 and above versions
